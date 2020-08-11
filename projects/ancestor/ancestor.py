@@ -36,7 +36,7 @@ from graph import Graph
 #             s.push(new_node)
 
 
-def earliest_ancestor(ancestors, starting_node, visited=None, path=None):
+def earliest_ancestor(ancestors, starting_node):
     
 
 # I have a list of ancestors which are individual sets
@@ -55,7 +55,12 @@ def earliest_ancestor(ancestors, starting_node, visited=None, path=None):
     
     # for p_c in ancestors:
     #     print(p_c[0])
+    tree = Graph()
 
+    for each_set in ancestors:
+        tree.add_vertex(each_set[0])
+        tree.add_vertex(each_set[1])
+        tree.add_edge(each_set[1], each_set[0])
 
     s = Stack()
     visited = set()
@@ -64,4 +69,8 @@ def earliest_ancestor(ancestors, starting_node, visited=None, path=None):
     s.push(starting_node)
 
     while s.size() > 0:
-        path = s.pop()  
+        path = s.pop()
+        node = path[-1]
+        longest_path.append(node)
+    
+    return longest_path
