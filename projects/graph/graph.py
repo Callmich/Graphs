@@ -171,7 +171,7 @@ class Graph:
             path = []
         
         if starting_vertex not in visited:
-            new_path = list([path])
+            new_path = list(path)
             new_path.append(starting_vertex)
 
             visited.add(starting_vertex)
