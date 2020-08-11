@@ -166,7 +166,24 @@ class Graph:
 
         This should be done using recursion.
         """
-        pass  # TODO
+        if visited == None and path == None:
+            visited = set()
+            path = []
+        
+        if starting_vertex not in visited:
+            new_path = list([path])
+            new_path.append(starting_vertex)
+
+            visited.add(starting_vertex)
+
+            if starting_vertex == destination_vertex:
+                return new_path
+            
+            for ngbr in self.get_neighbors(starting_vertex):
+                next_path = self.dfs_recursive(ngbr, destination_vertex, visited, new_path)
+                if next_path:
+                    return next_path
+
 
 if __name__ == '__main__':
     graph = Graph()  # Instantiate your graph
