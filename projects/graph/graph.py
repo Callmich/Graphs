@@ -108,7 +108,27 @@ class Graph:
         starting_vertex to destination_vertex in
         breath-first order.
         """
-        pass  # TODO
+        queue = Queue()
+        queue.enqueue([starting_vertex])
+
+        visited = set()
+
+        while queue.size() > 0:
+            path = queue.dequeue()
+
+            vert = path[-1]
+
+            if vert not in visited:
+                visited.add(vert)
+
+                if vert == destination_vertex:
+                    return path
+                
+                else:
+                    for ngbr in self.get_neighbors(vert):
+                        new_path = list(path)
+                        new_path.append(ngbr)
+                        queue.enqueue(new_path)
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -195,3 +215,4 @@ if __name__ == '__main__':
     '''
     print(graph.dfs(1, 6))
     print(graph.dfs_recursive(1, 6))
+
