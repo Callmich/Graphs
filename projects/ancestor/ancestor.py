@@ -2,7 +2,7 @@ from stack import Stack
 
 def earliest_ancestor(ancestors, starting_node):
     longest_path = 0
-    ancestors = None
+    ancestors = []
     s = Stack()
     visited = set()
 
@@ -15,4 +15,12 @@ def earliest_ancestor(ancestors, starting_node):
             visited.add(check_path)
         if len(check_path) > longest_path:
             longest_path = len(check_path)
+            ancestors = [check_path]
+        elif len(check_path) == longest_path:
+            ancestors = ancestors.append(check_path)
+        
+        for parent in self.get_neighbors(check_path):
+            new_node = list(path)
+            new_node.append(parent)
+            s.push(new_node)
             
