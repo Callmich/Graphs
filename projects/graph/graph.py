@@ -129,6 +129,7 @@ class Graph:
                         new_path = list(path)
                         new_path.append(ngbr)
                         queue.enqueue(new_path)
+        return None
 
     def dfs(self, starting_vertex, destination_vertex):
         """
@@ -136,7 +137,26 @@ class Graph:
         starting_vertex to destination_vertex in
         depth-first order.
         """
-        pass  # TODO
+        stack = Stack()
+
+        stack.push([starting_vertex])
+
+        visited = set()
+
+        while stack.size() > 0:
+            path = stack.pop()
+
+            vert = path[-1]
+
+            if vert not in visited:
+                visited.add(vert)
+            if vert == destination_vertex:
+                return path
+            else:
+                for ngbr in self.get_neighbors(vert):
+                    new_path = list(path)
+                    new_path.append(ngbr)
+                    stack.push(new_path)
 
     def dfs_recursive(self, starting_vertex, destination_vertex):
         """
