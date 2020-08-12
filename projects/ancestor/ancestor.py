@@ -74,4 +74,10 @@ def create_graph(lst):
         graph.add_edge(lst[1], lst[0])
     return graph
 
+def earliest_ancestor(ancestors, starting_node):
+    g = create_graph(ancestors)
 
+    s = Stack()
+    visited = set()
+    s.push([starting_node])
+    big_path = []
