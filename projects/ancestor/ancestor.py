@@ -258,7 +258,7 @@ def earliest_ancestor(ancestors, starting_node):
     visited = set()
     longest_path = []
     longest_length = 0
-    s.push(starting_node)
+    s.push([starting_node])
 
     while s.size() > 0:
         path = s.pop()
@@ -269,7 +269,7 @@ def earliest_ancestor(ancestors, starting_node):
         
         if node not in visited:
             visited.add(node)
-            ps = tree.get_neighbor(node)
+            ps = tree.get_neighbors(node)
 
             for p in ps:
                 new_path = path+[p]
