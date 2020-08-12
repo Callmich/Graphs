@@ -11,7 +11,7 @@ def earliest_ancestor(ancestors, starting_node):
         if each_set[1] in verts.keys():
             verts[each_set[1]].append(each_set[0])
         else:
-            verts[each_set[1] = each_set[0]]
+            verts[each_set[1]] = [each_set[0]]
 
     s = Stack()
     s.push([starting_node])
@@ -19,14 +19,21 @@ def earliest_ancestor(ancestors, starting_node):
     
     while s.size() > 0:
         path = s.pop()
-        node = path[-1]
+        v = path[-1]
 
-        if (len(path) >= longest_len and node < earliest_anc) or (len(path) > longest_len):
-            earliest_anc = node
-            longest_len = len(path)
-        
-        for ngbr in tree.vertices[node]:
-            new_path = list(path)
-            new_path.append(ngbr)
-            s.push(new_path)
-    return earliest_anc
+        if v not in verts.keys():
+            if v == starting_node:
+                return -1
+
+            if len(path) > len(longest_path):
+                longest_path = path
+            elif len(path) == len(longest_path):
+                if v < longest_path[-1]:
+                    longest_path = path
+        else:
+            for i in verts[v]:
+                copy_path = path.copy()
+                copy_path.append(i)
+                s.push(copy_path)
+
+    return longest_path[-1]
