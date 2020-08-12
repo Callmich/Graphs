@@ -65,3 +65,13 @@ class Graph:
 
     def get_neighbors(self, vert):
         return self.verticies[vert]
+
+def create_graph(lst):
+    graph = Graph()
+    for pair in lst:
+        graph.add_verts(lst[0])
+        graph.add_verts(lst[1])
+        graph.add_edge(lst[1], lst[0])
+    return graph
+
+
