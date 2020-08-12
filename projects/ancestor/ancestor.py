@@ -9,7 +9,10 @@ class Graph:
             self.vertices[vert] = set()
 
     def add_edge(self, vertI, vertII):
-        self.vertices[vertI].add(vertII)
+        if vertI in self.vertices and vertII in self.vertices:
+            self.vertices[vertI].add(vertII)
+        else:
+            raise IndexError("vertex does not exhist!")
 
     def get_neighbors(self, vert):
         return self.vertices[vert]
