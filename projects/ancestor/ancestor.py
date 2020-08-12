@@ -71,6 +71,8 @@ def earliest_ancestor(ancestors, starting_node):
     while s.size() > 0:
         path = s.pop()
         node = path[-1]
-        longest_path.append(node)
-    
-    return longest_path
+
+        if len(path) > len(longest_path):
+            longest_path = path
+        
+        
