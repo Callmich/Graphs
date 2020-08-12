@@ -81,3 +81,20 @@ def earliest_ancestor(ancestors, starting_node):
     visited = set()
     s.push([starting_node])
     big_path = []
+
+    while s.size() > 0:
+        path = s.pop()
+        node = path[-1]
+
+        if len(path) > len(big_path):
+            visited.add(node)
+            ps = g.get_neighbors(node)
+        
+        for p in ps:
+            path_copy = path+[p]
+            s.push(path_copy)
+    
+    if starting_node == big_path[-1]:
+        return -1
+    else:
+        return big_path[-1]
