@@ -22,6 +22,10 @@ My Plan:
 #             add in queue to run function again with the current room as the starting room
 #             move player in oposite direction back to previous room
 #             reset current room to previous room
-        
+
+
+##### Future options 
+##### 0randomize the direction to move
+##### reset the list to the rooms with the most possible directions
 
 '''
