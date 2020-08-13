@@ -109,7 +109,11 @@ class SocialGraph:
                     
                     traveled.add(final_user)
 
-
+                    for friend in self.friendships[final_user]:
+                        if friend not in path:
+                            new_path = path.copy()
+                            new_path.append(friend)
+                            q.enqueue(new_path)
 
         return visited
 
