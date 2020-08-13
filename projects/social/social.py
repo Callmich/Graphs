@@ -62,7 +62,7 @@ class SocialGraph:
         self.users = {}
         self.friendships = {}
         # !!!! IMPLEMENT ME
-        total_average = num_users * avg_friendships//2
+        
         # Add users
         for user in range(num_users):
             self.add_user(u)
@@ -73,6 +73,15 @@ class SocialGraph:
                 friendship = (user, friend)
                 friendships.append(friendship)
         
+        random.shuffle(friendships)
+
+        total_average = num_users * avg_friendships//2
+        for x in range(total_average):
+            user_id, friend_id = friendships[x]
+            if user_id < friend_id:
+                self.add_friendship(user_id, friend_id)
+
+
     def get_all_social_paths(self, user_id):
         """
         Takes a user's user_id as an argument
