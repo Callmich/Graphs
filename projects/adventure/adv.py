@@ -34,8 +34,19 @@ room_dict = {}
 for x in range(0, len(room_graph)):
     room_dict[x] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
 
-print(room_dict)
 
+# for x in world.starting_room.get_exits():
+#     if room_dict[world.starting_room][x] = '?'
+
+# room_dict[world.starting_room] = {}
+poss_dirs = ['n', 's', 'e', 'w']
+
+
+for direction in poss_dirs:
+    if direction not in world.starting_room.get_exits():
+        room_dict[world.starting_room.id].pop(direction)
+
+print(room_dict)
 
 # TRAVERSAL TEST
 visited_rooms = set()
