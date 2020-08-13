@@ -10,7 +10,7 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
+# map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
@@ -30,19 +30,28 @@ player = Player(world.starting_room)
 traversal_path = []
 
 # setting up an inital dictionary with as many entries as there are rooms
+
+# create a dictionary of 500 rooms 0 - 499 with an exmple being - 0: {'n': '?', 's': '?', 'w': '?', 'e': '?'}
 room_dict = {}
 for x in range(0, len(room_graph)):
     room_dict[x] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
 
+# set up some sort of queue for function runs ######
+
+# create a visited
+
 poss_dirs = ['n', 's', 'e', 'w']
 opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 
+def sprint_solver(current_room, visited=None):
+    if visited == None:
+        visited = set()
 
 for direction in poss_dirs:
     if direction not in world.starting_room.get_exits():
         room_dict[world.starting_room.id].pop(direction)
 
-print(opposite_dirs['n'])
+print(room_dict[world.starting_room.id])
 
 # TRAVERSAL TEST
 visited_rooms = set()
