@@ -65,7 +65,7 @@ class SocialGraph:
         
         # Add users
         for user in range(num_users):
-            self.add_user(u)
+            self.add_user(user)
         # Create friendships
         friendships = []
         for user in range(1, self.last_id+1):
@@ -93,6 +93,24 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        for user in self.users:
+            traveled = set()
+            q = Queue()
+            q.enqueue([user_id])
+
+            while q.size() > 0:
+                path = q.dequeue()
+                final_user = path[-1]
+
+                if final_user not in traveled:
+                    if final_user == user:
+                        visited[user] = path
+                        break
+                    
+                    traveled.add(final_user)
+
+
+
         return visited
 
 
