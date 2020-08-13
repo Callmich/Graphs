@@ -29,24 +29,20 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+# setting up an inital dictionary with as many entries as there are rooms
 room_dict = {}
-
 for x in range(0, len(room_graph)):
     room_dict[x] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
 
-
-# for x in world.starting_room.get_exits():
-#     if room_dict[world.starting_room][x] = '?'
-
-# room_dict[world.starting_room] = {}
 poss_dirs = ['n', 's', 'e', 'w']
+opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 
 
 for direction in poss_dirs:
     if direction not in world.starting_room.get_exits():
         room_dict[world.starting_room.id].pop(direction)
 
-print(room_dict)
+print(opposite_dirs['n'])
 
 # TRAVERSAL TEST
 visited_rooms = set()
