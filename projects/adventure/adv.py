@@ -86,6 +86,7 @@ def sprint_slayer(current_room, visited=None, queue=None):
             if room_dict[current.id][avail_exit] == '?':
                 # move player into a new room
                 player.travel(avail_exit)
+                traversal_path.append(avail_exit)
                 # change current to the new room
                 current = player.current_room
                 # change previous room's direction in dict to current room id
