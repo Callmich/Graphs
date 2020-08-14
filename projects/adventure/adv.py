@@ -14,7 +14,7 @@ world = World()
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-# map_file = "maps/main_maze.txt"
+map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -46,6 +46,7 @@ opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 def sprint_slayer(current_room, visited=None):
     if visited == None:
         visited = set()
+    visited.add(current_room.id)
 
     # possiblly a while loop for the length of the amount of rooms being added to vistied
     while len(visited) < len(room_graph):
@@ -53,17 +54,41 @@ def sprint_slayer(current_room, visited=None):
         current = current_room
         previous = current_room
 
-    # for loop for possible directions
-    for direction in poss_dirs:
-        # if an exit in a direction does not exist it removes it from the dictionary
-        if direction not in current.get_exits():
-            room_dict[current.id].pop(direction)
-    
-    # for loop for remining unchecked directions
-    for avail_exit in room_dict[current.id]:
+        # for loop for possible directions
+        for direction in poss_dirs:
+            # if an exit in a direction does not exist it removes it from the dictionary
+            if direction not in current.get_exits():
+                room_dict[current.id].pop(direction)
         
+        # for loop for available directions
+        for avail_exit in room_dict[current.id]:
+            #check if direction goes to an unchecked room
+            if room_dict[current.id][avail_exit] == '?':
+                # move player into a new room
+                player.travel(avail_exit)
+                # change current to the new room
+                current = player.current_room
+                print()
+                print(current)
+                print()
+                # add to visited
+                visited.add(current.id)
+                print()
+                print(visited)
+                print()
+                # change previous room's direction in dict to current room id
+                room_dict[previous.id][avail_exit] = current.id
+                # change current room's opposite direction in dict to previous room id
+                room_dict[current.id][opposite_dirs[avail_exit]] = previous.id
+                # add in queue to run function again with the current room as the starting room
+
+                # move player in oposite direction back to previous room
+                player.travel(opposite_dirs[avail_exit])
+                # reset current room to previous room
+                current = previous
 
 
+sprint_slayer(world.starting_room)
 
 # TRAVERSAL TEST
 visited_rooms = set()
