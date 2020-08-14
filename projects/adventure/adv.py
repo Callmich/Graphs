@@ -56,15 +56,13 @@ for x in range(0, len(room_graph)):
 
 poss_dirs = ['n', 's', 'e', 'w']
 opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
+q = Queue()
 
-
-def sprint_slayer(current_room, visited=None, queue=None):
+def sprint_slayer(current_room, visited=None):
+    q.dequeue()
     # create a visited if none
     if visited == None:
         visited = set()
-
-    if queue == None:
-        q = Queue()
 
     # possiblly a while loop for the length of the amount of rooms being added to vistied
     while len(visited) < len(room_graph):
@@ -94,15 +92,16 @@ def sprint_slayer(current_room, visited=None, queue=None):
                 # change current room's opposite direction in dict to previous room id
                 room_dict[current.id][opposite_dirs[avail_exit]] = previous.id
                 # add in queue to run function again with the current room as the starting room
-                q.enqueue(sprint_slayer(current, visited, queue))
+                q.enqueue(sprint_slayer(current, visited))
                 # move player in oposite direction back to previous room
                 player.travel(opposite_dirs[avail_exit])
                 # reset current room to previous room
                 current = previous
-                print(queue)
+        print(traversal_path)
+        
+q.enqueue(sprint_slayer(current_room)
 
-
-sprint_slayer(world.starting_room)
+go = q
 print(room_dict)
 
 
