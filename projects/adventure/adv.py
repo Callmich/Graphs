@@ -25,10 +25,10 @@ world = World()
 
 # You may uncomment the smaller graphs for development and testing purposes.
 # map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+# map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -58,7 +58,8 @@ poss_dirs = ['n', 's', 'e', 'w']
 opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 q = Queue()
 
-def sprint_slayer(current_room, visited=None):
+def sprint_slayer(current_room, traversal_path, visited=None):
+    
     q.dequeue()
     # create a visited if none
     if visited == None:
@@ -71,7 +72,7 @@ def sprint_slayer(current_room, visited=None):
         previous = current_room
         # add to visited
         visited.add(current.id)
-
+        print(visited)
         # for loop for possible directions
         for direction in poss_dirs:
             # if an exit in a direction does not exist it removes it from the dictionary
@@ -84,7 +85,8 @@ def sprint_slayer(current_room, visited=None):
             if room_dict[current.id][avail_exit] == '?':
                 # move player into a new room
                 player.travel(avail_exit)
-                traversal_path.append(avail_exit)
+                traversal_path.append([avail_exit])
+                
                 # change current to the new room
                 current = player.current_room
                 # change previous room's direction in dict to current room id
@@ -92,17 +94,19 @@ def sprint_slayer(current_room, visited=None):
                 # change current room's opposite direction in dict to previous room id
                 room_dict[current.id][opposite_dirs[avail_exit]] = previous.id
                 # add in queue to run function again with the current room as the starting room
-                sprint_slayer(current, visited)
+                q.enqueue(sprint_slayer(current, traversal_path, visited))
                 # move player in oposite direction back to previous room
                 player.travel(opposite_dirs[avail_exit])
                 # reset current room to previous room
                 current = previous
-        return
-        print(traversal_path)
+                # print(traversal_path)
+        return 
+    
         
-q.enqueue(sprint_slayer(world.starting_room))
+q.enqueue(sprint_slayer(world.starting_room, traversal_path))
 
 
+print(traversal_path)
 print(room_dict)
 
 
