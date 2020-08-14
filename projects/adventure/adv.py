@@ -43,15 +43,27 @@ for x in range(0, len(room_graph)):
 poss_dirs = ['n', 's', 'e', 'w']
 opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 
-def sprint_solver(current_room, visited=None):
+def sprint_slayer(current_room, visited=None):
     if visited == None:
         visited = set()
 
-for direction in poss_dirs:
-    if direction not in world.starting_room.get_exits():
-        room_dict[world.starting_room.id].pop(direction)
+    # possiblly a while loop for the length of the amount of rooms being added to vistied
+    while len(visited) < len(room_graph):
+        # set a current and previous room to starting room
+        current = current_room
+        previous = current_room
 
-print(room_dict[world.starting_room.id])
+    # for loop for possible directions
+    for direction in poss_dirs:
+        # if an exit in a direction does not exist it removes it from the dictionary
+        if direction not in current.get_exits():
+            room_dict[current.id].pop(direction)
+    
+    # for loop for remining unchecked directions
+    for avail_exit in room_dict[current.id]:
+        
+
+
 
 # TRAVERSAL TEST
 visited_rooms = set()
