@@ -24,8 +24,8 @@ world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-map_file = "maps/test_line.txt"
-# map_file = "maps/test_cross.txt"
+# map_file = "maps/test_line.txt"
+map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
 # map_file = "maps/main_maze.txt"
@@ -92,16 +92,17 @@ def sprint_slayer(current_room, visited=None):
                 # change current room's opposite direction in dict to previous room id
                 room_dict[current.id][opposite_dirs[avail_exit]] = previous.id
                 # add in queue to run function again with the current room as the starting room
-                q.enqueue(sprint_slayer(current, visited))
+                sprint_slayer(current, visited)
                 # move player in oposite direction back to previous room
                 player.travel(opposite_dirs[avail_exit])
                 # reset current room to previous room
                 current = previous
+        return
         print(traversal_path)
         
-q.enqueue(sprint_slayer(current_room)
+q.enqueue(sprint_slayer(world.starting_room))
 
-go = q
+
 print(room_dict)
 
 
