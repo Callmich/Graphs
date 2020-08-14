@@ -5,16 +5,30 @@ from world import World
 import random
 from ast import literal_eval
 
+# Creating a Queue
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
 # Load world
 world = World()
 
 
 # You may uncomment the smaller graphs for development and testing purposes.
-# map_file = "maps/test_line.txt"
+map_file = "maps/test_line.txt"
 # map_file = "maps/test_cross.txt"
 # map_file = "maps/test_loop.txt"
 # map_file = "maps/test_loop_fork.txt"
-map_file = "maps/main_maze.txt"
+# map_file = "maps/main_maze.txt"
 
 # Loads the map into a dictionary
 room_graph=literal_eval(open(map_file, "r").read())
@@ -38,21 +52,27 @@ for x in range(0, len(room_graph)):
 
 # set up some sort of queue for function runs ######
 
-# create a visited
+
 
 poss_dirs = ['n', 's', 'e', 'w']
 opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
 
-def sprint_slayer(current_room, visited=None):
+
+def sprint_slayer(current_room, visited=None, queue=None):
+    # create a visited if none
     if visited == None:
         visited = set()
-    visited.add(current_room.id)
+
+    if queue == None:
+        q = Queue()
 
     # possiblly a while loop for the length of the amount of rooms being added to vistied
     while len(visited) < len(room_graph):
         # set a current and previous room to starting room
         current = current_room
         previous = current_room
+        # add to visited
+        visited.add(current.id)
 
         # for loop for possible directions
         for direction in poss_dirs:
@@ -68,27 +88,22 @@ def sprint_slayer(current_room, visited=None):
                 player.travel(avail_exit)
                 # change current to the new room
                 current = player.current_room
-                print()
-                print(current)
-                print()
-                # add to visited
-                visited.add(current.id)
-                print()
-                print(visited)
-                print()
                 # change previous room's direction in dict to current room id
                 room_dict[previous.id][avail_exit] = current.id
                 # change current room's opposite direction in dict to previous room id
                 room_dict[current.id][opposite_dirs[avail_exit]] = previous.id
                 # add in queue to run function again with the current room as the starting room
-
+                q.enqueue(sprint_slayer(current, visited, queue))
                 # move player in oposite direction back to previous room
                 player.travel(opposite_dirs[avail_exit])
                 # reset current room to previous room
                 current = previous
+                print(queue)
 
 
 sprint_slayer(world.starting_room)
+print(room_dict)
+
 
 # TRAVERSAL TEST
 visited_rooms = set()
