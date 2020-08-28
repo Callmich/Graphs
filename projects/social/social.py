@@ -1,3 +1,22 @@
+import random
+
+class Queue():
+    def __init__(self):
+        self.queue = []
+    
+    def enqueue(self, value):
+        self.queue.append(value)
+
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+
+    def size(self):
+        return len(self.queue)
+
+
 class User:
     def __init__(self, name):
         self.name = name
@@ -43,10 +62,25 @@ class SocialGraph:
         self.users = {}
         self.friendships = {}
         # !!!! IMPLEMENT ME
-
+        
         # Add users
-
+        for user in range(num_users):
+            self.add_user(user)
         # Create friendships
+        friendships = []
+        for user in range(1, self.last_id+1):
+            for friend in range(user+1, num_users+1):
+                friendship = (user, friend)
+                friendships.append(friendship)
+        
+        random.shuffle(friendships)
+
+        total_average = num_users * avg_friendships//2
+        for x in range(total_average):
+            user_id, friend_id = friendships[x]
+            if user_id < friend_id:
+                self.add_friendship(user_id, friend_id)
+
 
     def get_all_social_paths(self, user_id):
         """
@@ -59,6 +93,28 @@ class SocialGraph:
         """
         visited = {}  # Note that this is a dictionary, not a set
         # !!!! IMPLEMENT ME
+        for user in self.users:
+            traveled = set()
+            q = Queue()
+            q.enqueue([user_id])
+
+            while q.size() > 0:
+                path = q.dequeue()
+                final_user = path[-1]
+
+                if final_user not in traveled:
+                    if final_user == user:
+                        visited[user] = path
+                        break
+                    
+                    traveled.add(final_user)
+
+                    for friend in self.friendships[final_user]:
+                        if friend not in path:
+                            new_path = path.copy()
+                            new_path.append(friend)
+                            q.enqueue(new_path)
+
         return visited
 
 
