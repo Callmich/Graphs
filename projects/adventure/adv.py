@@ -5,6 +5,20 @@ from world import World
 import random
 from ast import literal_eval
 
+# Creating a Queue
+class Queue():
+    def __init__(self):
+        self.queue = []
+    def enqueue(self, value):
+        self.queue.append(value)
+    def dequeue(self):
+        if self.size() > 0:
+            return self.queue.pop(0)
+        else:
+            return None
+    def size(self):
+        return len(self.queue)
+
 # Load world
 world = World()
 
@@ -29,6 +43,72 @@ player = Player(world.starting_room)
 # traversal_path = ['n', 'n']
 traversal_path = []
 
+# setting up an inital dictionary with as many entries as there are rooms
+
+# create a dictionary of 500 rooms 0 - 499 with an exmple being - 0: {'n': '?', 's': '?', 'w': '?', 'e': '?'}
+room_dict = {}
+for x in range(0, len(room_graph)):
+    room_dict[x] = {'n': '?', 's': '?', 'w': '?', 'e': '?'}
+
+# set up some sort of queue for function runs ######
+
+
+
+poss_dirs = ['n', 's', 'e', 'w']
+opposite_dirs = {'n':'s', 's':'n', 'e':'w', 'w':'e'}
+q = Queue()
+
+def sprint_slayer(current_room, traversal_path, visited=None):
+    
+    q.dequeue()
+    # create a visited if none
+    if visited == None:
+        visited = set()
+
+    # possiblly a while loop for the length of the amount of rooms being added to vistied
+    while len(visited) < len(room_graph):
+        # set a current and previous room to starting room
+        current = current_room
+        previous = current_room
+        # add to visited
+        visited.add(current.id)
+        # print(visited)
+        # for loop for possible directions
+        for direction in poss_dirs:
+            # if an exit in a direction does not exist it removes it from the dictionary
+            if direction not in current.get_exits() and direction in room_dict[current.id]:
+                room_dict[current.id].pop(direction)
+        
+        # for loop for available directions
+        for avail_exit in room_dict[current.id]:
+            #check if direction goes to an unchecked room
+            if room_dict[current.id][avail_exit] == '?':
+                # move player into a new room
+                player.travel(avail_exit)
+                traversal_path.append(avail_exit)
+                
+                # change current to the new room
+                current = player.current_room
+                # change previous room's direction in dict to current room id
+                room_dict[previous.id][avail_exit] = current.id
+                # change current room's opposite direction in dict to previous room id
+                room_dict[current.id][opposite_dirs[avail_exit]] = previous.id
+                # add in queue to run function again with the current room as the starting room
+                q.enqueue(sprint_slayer(current, traversal_path, visited))
+                # move player in oposite direction back to previous room
+                player.travel(opposite_dirs[avail_exit])
+                traversal_path.append(opposite_dirs[avail_exit])
+                # reset current room to previous room
+                current = previous
+                # print(traversal_path)
+        return 
+    
+        
+q.enqueue(sprint_slayer(world.starting_room, traversal_path))
+
+
+# print(traversal_path)
+print(room_dict)
 
 
 # TRAVERSAL TEST
@@ -51,12 +131,12 @@ else:
 #######
 # UNCOMMENT TO WALK AROUND
 #######
-player.current_room.print_room_description(player)
-while True:
-    cmds = input("-> ").lower().split(" ")
-    if cmds[0] in ["n", "s", "e", "w"]:
-        player.travel(cmds[0], True)
-    elif cmds[0] == "q":
-        break
-    else:
-        print("I did not understand that command.")
+# player.current_room.print_room_description(player)
+# while True:
+#     cmds = input("-> ").lower().split(" ")
+#     if cmds[0] in ["n", "s", "e", "w"]:
+#         player.travel(cmds[0], True)
+#     elif cmds[0] == "q":
+#         break
+#     else:
+#         print("I did not understand that command.")
